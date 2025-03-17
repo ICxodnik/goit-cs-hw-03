@@ -2,20 +2,20 @@
 #Отримати всі завдання певного користувача
 get_task_by_user = """
 SELECT * FROM tasks
-WHERE user_id = 1;
+WHERE user_id = %s;
 """
 
 #Вибрати завдання за певним статусом
 get_task_by_status = """
 SELECT * FROM tasks 
-WHERE status_id = (SELECT id FROM status WHERE name = 'new');
+WHERE status_id = (SELECT id FROM status WHERE name = %s);
 """
 
 #Оновити статус конкретного завдання
 update_status = """
-UPDATE tasks 
+UPDATE tasks
 SET status_id = (SELECT id FROM status WHERE name = 'in progress') 
-WHERE id = 1;
+WHERE id = %s;
 """
 
 #Отримати список користувачів, які не мають жодного завдання
@@ -27,7 +27,7 @@ WHERE id NOT IN (SELECT user_id FROM tasks);
 #Додати нове завдання для конкретного користувача
 add_task = """
 INSERT INTO tasks (title, description, status_id, user_id) 
-VALUES ('New Task', 'Description', 1, 2);
+VALUES (%s, %s, %s, %s);
 """
 
 #Отримати всі завдання, які ще не завершено
@@ -39,20 +39,20 @@ WHERE status_id != (SELECT id FROM status WHERE name = 'completed');
 #Видалити конкретне завдання
 delete_task = """
 DELETE FROM tasks 
-WHERE id = 1;
+WHERE id = %s;
 """
 
 #Знайти користувачів з певною електронною поштою
 get_user_by_email = """
 SELECT * FROM users 
-WHERE email LIKE '%@gmail.com';
+WHERE email LIKE %s;
 """
 
 #Оновити ім'я користувача
 update_user_name = """
 UPDATE users 
-SET fullname = 'Updated Name' 
-WHERE id = 1;
+SET fullname = %s 
+WHERE id = %s;
 """
 
 #Отримати кількість завдань для кожного статусу
