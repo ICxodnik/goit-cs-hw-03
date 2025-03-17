@@ -6,7 +6,7 @@ from repository import *
 
 @contextmanager
 def create_connection():
-    print(f"Створення з'єднання з PostgreSQL.")
+    # print(f"Створення з'єднання з PostgreSQL.")
     conn = None
     try:
         conn = psycopg2.connect(**DB_CONFIG)
@@ -30,14 +30,16 @@ def execute_query(sql: str, params: tuple = ()) -> None:
         with create_connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(sql, params)
+                #print(f"Выполненный SQL запрос: {cur.query.decode()}")
                 # Отримуємо кількість змінених рядків
                 affected_rows = cur.rowcount
                 # Якщо це SELECT запит, можемо отримати результати
                 if sql.strip().upper().startswith('SELECT'):
                     results = cur.fetchall()
-                    print(f"Запит виконано успішно. Отримано {len(results)} записів.")
+                    print(f"Запит виконано успішно. Отримано {len(results)} записів:")
+                    #print(results)
                     return results
-                else:
+                elif affected_rows >= 0:
                     print(f"Запит виконано успішно. Змінено {affected_rows} записів.")
     except psycopg2.Error as e:
         print(f"Помилка виконання запиту: {e}")

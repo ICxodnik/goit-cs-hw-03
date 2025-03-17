@@ -1,4 +1,10 @@
 #SQL-запити 
+clear_db = """
+DROP TABLE IF EXISTS tasks;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS status;
+"""
+
 #Отримати всі завдання певного користувача
 get_task_by_user = """
 SELECT * FROM tasks
@@ -14,7 +20,7 @@ WHERE status_id = (SELECT id FROM status WHERE name = %s);
 #Оновити статус конкретного завдання
 update_status = """
 UPDATE tasks
-SET status_id = (SELECT id FROM status WHERE name = 'in progress') 
+SET status_id = (SELECT id FROM status WHERE name = %s) 
 WHERE id = %s;
 """
 
@@ -92,8 +98,8 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(100) UNIQUE
 );
 """
-sql_create_statuses_table = """
-CREATE TABLE IF NOT EXISTS statuses (
+sql_create_status_table = """
+CREATE TABLE IF NOT EXISTS status (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) UNIQUE
 );
@@ -103,7 +109,7 @@ CREATE TABLE IF NOT EXISTS tasks (
     id SERIAL PRIMARY KEY,
     title VARCHAR(100),
     description TEXT,
-    status_id INTEGER REFERENCES statuses(id),
+    status_id INTEGER REFERENCES status(id),
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
 );
 """
@@ -114,8 +120,8 @@ INSERT INTO users (fullname, email) VALUES (%s, %s)
 ON CONFLICT (email) DO NOTHING;
 """
 
-sql_statuses = """
-INSERT INTO statuses (name) VALUES (%s)
+sql_status = """
+INSERT INTO status (name) VALUES (%s)
 ON CONFLICT (name) DO NOTHING;
 """
 
