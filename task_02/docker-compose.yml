@@ -1,0 +1,12 @@
+services:
+
+  app:
+    build: .
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:8
+    ports:
+      - 27017:27017
+    
